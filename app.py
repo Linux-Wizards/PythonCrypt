@@ -3,11 +3,9 @@ from flask_restful import Resource, Api
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
-from base64 import b64encode, b64decode
 from flask_cors import CORS
 import uuid
 import os
-import json
 
 app = Flask(__name__)
 api = Api(app)
