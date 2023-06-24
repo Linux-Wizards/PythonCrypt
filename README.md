@@ -4,7 +4,7 @@
 
 Python 3: Tested on Python 3.10.6
 
-Python packages: pycryptodome, Crypto, flask-restful
+Python packages: flask, flask_restful, flask_cors, pycryptodome
 
 ## Encryption
 
