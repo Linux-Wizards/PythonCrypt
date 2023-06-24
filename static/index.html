@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Encryption API</title>
+</head>
+<body>
+    <h1>File Encryption API</h1>
+
+    <h2>Upload a file</h2>
+    <form id="upload-form">
+        <input type="file" id="file-input" required>
+        <button type="submit">Upload</button>
+    </form>
+    <p id="upload-result"></p>
+
+    <h2>Download a file</h2>
+    <form id="download-form">
+        <input type="text" id="file-id-input" placeholder="File ID" required>
+        <button type="submit">Download</button>
+    </form>
+    <p id="download-result"></p>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var fileInput = document.getElementById('file-input');
+            var formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            fetch('http://localhost:5000/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('upload-result').textContent = 'File uploaded. File ID: ' + data.file_id;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('upload-result').textContent = 'Error uploading file.';
+            });
+        });
+
+        document.getElementById('download-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var fileId = document.getElementById('file-id-input').value;
+
+            fetch('http://localhost:5000/download/' + fileId)
+            .then(response => response.blob())
+            .then(blob => {
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = fileId;
+                document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+                a.click();    
+                a.remove();  //afterwards we remove the element again         
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('download-result').textContent = 'Error downloading file.';
+            });
+        });
+    </script>
+</body>
+</html>
